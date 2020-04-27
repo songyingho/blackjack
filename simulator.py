@@ -34,20 +34,6 @@ def hand_evaluation(hand):
         
     return total_value
 
-def local_evaluation(hand_1):
-    global players_win, dealers_win, draws, wallet, local_win, local_loss, local_push
-    if hand_evaluation(hand_1) > 21:
-        local_loss += 1
-    elif hand_evaluation(hand_1) <= 21 and hand_evaluation(dealers_card) > 21:
-        local_win += 1
-    elif hand_evaluation(hand_1) <= 21 and hand_evaluation(dealers_card) <= 21:
-        if hand_evaluation(hand_1) > hand_evaluation(dealers_card):
-            local_win += 1
-        elif hand_evaluation(hand_1) == hand_evaluation(dealers_card):
-            local_push += 1
-        elif hand_evaluation(hand_1) < hand_evaluation(dealers_card):
-            local_loss += 1
-
 def double_down(players_card):
     global players_win, dealers_win, draws, wallet
     players_card.append(cards_for_play.pop(random.choice(list(range(0,len(cards_for_play))))))
@@ -203,7 +189,7 @@ def hit(players_card):
         stand(players_card)
         
 def split():
-    global players_win, dealers_win, draws, wallet
+    global players_win, dealers_win, draws, wallet, dealers_card, hand_1, hand_2
     hand_1 = [players_card[0]]
     hand_2 = [players_card[1]]
     
@@ -424,22 +410,35 @@ def split():
         elif hand_evaluation(hand_1) != 21:
             print("Choice of Action:")
             print("1. Hit")
-            print("2. Double Down")
-            print("3. Stand")
+            print("2. Stand")
 
             decision_1 = input("Please input action: ")
+            
+            if decision_1 == '1':
+                while decision_1 == '1':
+                        hand_1.append(cards_for_play.pop(random.choice(list(range(0,len(cards_for_play))))))
+                        
+                        print("")
+                        print("You're playing your first split")
+                        print("")
+                        print(f"Your hand: {hand_1}  ({hand_evaluation(hand_1)})")
+                        print(f"Dealer hand: {dealers_card}  ({hand_evaluation(dealers_card)})")
+                        print("")
 
-            if decision_1 == '2':
-                double_down(hand_1)
+                        if hand_evaluation(hand_1) < 21:
 
-            elif decision_1 == '3':
-                stand(hand_1)
+                            print("Choice of Action:")
+                            print("1. Hit")
+                            print("2. Stand")
 
-            elif decision_1 == '1':
-                hit(hand_1)
-        
+                            decision_1 = input("Please input action: ")
+                            
+                        elif hand_evaluation(hand_1) >= 21:
+                            decision_1 = '2'
+
         # Play Hand 2
         hand_2.append(cards_for_play.pop(random.choice(list(range(0,len(cards_for_play))))))
+        blackjack_count = 0
         
         print("")
         print("You're playing your second split")
@@ -454,25 +453,38 @@ def split():
         elif hand_evaluation(hand_2) != 21:
             print("Choice of Action:")
             print("1. Hit")
-            print("2. Double Down")
-            print("3. Stand")
+            print("2. Stand")
 
             decision_1 = input("Please input action: ")
+            
+            if decision_1 == '1':
+                while decision_1 == '1':
+                        hand_2.append(cards_for_play.pop(random.choice(list(range(0,len(cards_for_play))))))
 
-            if decision_1 == '2':
-                double_down(hand_2)
+                        print("")
+                        print("You're playing your second split")
+                        print("")
+                        print(f"Your hand: {hand_2}  ({hand_evaluation(hand_2)})")
+                        print(f"Dealer hand: {dealers_card}  ({hand_evaluation(dealers_card)})")
+                        print("")
 
-            elif decision_1 == '3':
-                stand(hand_2)
+                        
+                        if hand_evaluation(hand_2) >= 21:
+                            decision_1 = '2'
 
-            elif decision_1 == '1':
-                hit(hand_2)
-        
+                        elif hand_evaluation(hand_2) < 21:
+
+                            print("Choice of Action:")
+                            print("1. Hit")
+                            print("2. Stand")
+
+                            decision_1 = input("Please input action: ")
+                
         # Evaluate results
         while hand_evaluation(dealers_card) < 17:
             dealers_card.append(cards_for_play.pop(random.choice(list(range(0,len(cards_for_play))))))
         
-        # 2 blackjacks, dealer no 21
+        # 2 blackjacks, dealer no 21   OK
         if blackjack_count == 2 and hand_evaluation(dealers_card) != 21:
             print("")
             print(f"Hand 1: {hand_1}  ({hand_evaluation(hand_1)})")
@@ -483,7 +495,7 @@ def split():
             players_win += 2
             wallet += 3 * wage
         
-        # 2 blackjacks, dealer 21
+        # 2 blackjacks, dealer 21    OK
         elif blackjack_count == 2 and hand_evaluation(dealers_card) == 21:
             print("")
             print(f"Hand 1: {hand_1}  ({hand_evaluation(hand_1)})")
@@ -496,7 +508,7 @@ def split():
         # 1 blackjack
         elif blackjack_count == 1:
             
-            # 1 blackjack, 1 bust
+            # 1 blackjack, 1 bust    OK
             if hand_evaluation(hand_1) > 21 or hand_evaluation(hand_2) > 21 and hand_evaluation(dealers_card) != 21:
                 print("")
                 print(f"Hand 1: {hand_1}  ({hand_evaluation(hand_1)})")
@@ -508,19 +520,19 @@ def split():
                 dealers_win += 1
                 wallet += 0.5 * wage
                 
-            # 1 blackjack, 1 bust, dealer 21
+            # 1 blackjack, 1 bust, dealer 21   OK
             elif hand_evaluation(hand_1) > 21 or hand_evaluation(hand_2) > 21 and hand_evaluation(dealers_card) == 21:
                 print("")
                 print(f"Hand 1: {hand_1}  ({hand_evaluation(hand_1)})")
                 print(f"Hand 2: {hand_2}  ({hand_evaluation(hand_2)})")
                 print(f"Dealer hand: {dealers_card}  ({hand_evaluation(dealers_card)})")
                 print("")
-                print("You pushed your blackjack and bust one hand! ") 
+                print("You pushed your blackjack and busted one hand! ") 
                 draws += 1
                 dealers_win += 1
                 wallet -= wage
                 
-            # 1 blackjack, no bust, dealer bust
+            # 1 blackjack, no bust, dealer bust   OK
             elif hand_evaluation(hand_1) <= 21 and hand_evaluation(hand_2) <= 21 and hand_evaluation(dealers_card) > 21:
                 print("")
                 print(f"Hand 1: {hand_1}  ({hand_evaluation(hand_1)})")
@@ -531,10 +543,10 @@ def split():
                 players_win += 2
                 wallet += 2.5 * wage
                 
-            # 1 blackjack, no bust, dealer 21
+            # 1 blackjack, no bust, dealer 21      OK
             elif hand_evaluation(hand_1) <= 21 and hand_evaluation(hand_2) <= 21 and hand_evaluation(dealers_card) == 21:
                 
-                # 2 push (all 21)
+                # 2 push (all 21)    OK
                 if hand_evaluation(hand_1) == hand_evaluation(hand_2):
                     print("")
                     print(f"Hand 1: {hand_1}  ({hand_evaluation(hand_1)})")
@@ -544,7 +556,7 @@ def split():
                     print("Both hands pushed.")
                     draws += 2
                 
-                # 1 push 1 loss             
+                # 1 push 1 loss      OK
                 elif hand_evaluation(hand_1) != hand_evaluation(hand_2):
                     print("")
                     print(f"Hand 1: {hand_1}  ({hand_evaluation(hand_1)})")
@@ -558,7 +570,7 @@ def split():
             # 1 blackjack, no bust, dealer no 21
             elif hand_evaluation(hand_1) <= 21 and hand_evaluation(hand_2) <= 21 and hand_evaluation(dealers_card) != 21:
                 
-                # Evaluate smaller hand against dealer
+                # Evaluate smaller hand against dealer    OK OK  OK
                 if hand_evaluation(hand_1) > hand_evaluation(hand_2):
                     if hand_evaluation(hand_2) > hand_evaluation(dealers_card):
                         print("")
@@ -600,67 +612,21 @@ def split():
             
             local_evaluation(hand_1)
             local_evaluation(hand_2)
-            
-            if local_win == 2:
-                print("")
-                print(f"Hand 1: {hand_1}  ({hand_evaluation(hand_1)})")
-                print(f"Hand 2: {hand_2}  ({hand_evaluation(hand_2)})")
-                print(f"Dealer hand: {dealers_card}  ({hand_evaluation(dealers_card)})")
-                print("")
-                print("You won both hands!") 
-                players_win += 2
-                wallet += 2 * wage
-                
-            elif local_push == 2:
-                print("")
-                print(f"Hand 1: {hand_1}  ({hand_evaluation(hand_1)})")
-                print(f"Hand 2: {hand_2}  ({hand_evaluation(hand_2)})")
-                print(f"Dealer hand: {dealers_card}  ({hand_evaluation(dealers_card)})")
-                print("")
-                print("You pushed both hands!") 
-                draws += 2
-                
-            elif local_loss == 2:
-                print("")
-                print(f"Hand 1: {hand_1}  ({hand_evaluation(hand_1)})")
-                print(f"Hand 2: {hand_2}  ({hand_evaluation(hand_2)})")
-                print(f"Dealer hand: {dealers_card}  ({hand_evaluation(dealers_card)})")
-                print("")
-                print("You lost both hands!") 
-                dealers_win += 2
-                wallet -= 2 * wage
-                
-            elif local_win == 1 and local_loss == 1:
-                print("")
-                print(f"Hand 1: {hand_1}  ({hand_evaluation(hand_1)})")
-                print(f"Hand 2: {hand_2}  ({hand_evaluation(hand_2)})")
-                print(f"Dealer hand: {dealers_card}  ({hand_evaluation(dealers_card)})")
-                print("")
-                print("You won one hand and lost one hand!") 
-                players_win += 1
-                dealers_win += 1
-                
-            elif local_win == 1 and local_push == 1:
-                print("")
-                print(f"Hand 1: {hand_1}  ({hand_evaluation(hand_1)})")
-                print(f"Hand 2: {hand_2}  ({hand_evaluation(hand_2)})")
-                print(f"Dealer hand: {dealers_card}  ({hand_evaluation(dealers_card)})")
-                print("")
-                print("You won one hand and pushed one hand!") 
-                players_win += 1
-                draws += 1
-                wallet += wage
-                
-            elif local_push == 1 and local_loss == 1:
-                print("")
-                print(f"Hand 1: {hand_1}  ({hand_evaluation(hand_1)})")
-                print(f"Hand 2: {hand_2}  ({hand_evaluation(hand_2)})")
-                print(f"Dealer hand: {dealers_card}  ({hand_evaluation(dealers_card)})")
-                print("")
-                print("You lost one hand and pushed one hand!") 
-                dealers_win += 1
-                draws += 1
-                wallet -= wage
+#     return hand_1, hand_2
+    
+def local_evaluation(hand):
+    global players_win, dealers_win, draws, wallet, local_win, local_loss, local_push, dealers_card
+    if hand_evaluation(hand) > 21:
+        local_loss += 1
+    elif hand_evaluation(hand) <= 21 and hand_evaluation(dealers_card) > 21:
+        local_win += 1
+    elif hand_evaluation(hand) <= 21 and hand_evaluation(dealers_card) <= 21:
+        if hand_evaluation(hand) > hand_evaluation(dealers_card):
+            local_win += 1
+        elif hand_evaluation(hand) == hand_evaluation(dealers_card):
+            local_push += 1
+        elif hand_evaluation(hand) < hand_evaluation(dealers_card):
+            local_loss += 1
         
 one_suit = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
 one_deck = 4 * one_suit
@@ -678,7 +644,11 @@ while to_continue == True:
     wage = int(input("Please place your bet for this round. "))
     
     # Shuffling cards
-    cards_for_play = random.sample(all_cards, len(all_cards))    
+    cards_for_play = random.sample(all_cards, len(all_cards))
+    
+    local_win = 0
+    local_loss = 0
+    local_push = 0
 
     players_card = []
     dealers_card = []
@@ -686,7 +656,7 @@ while to_continue == True:
     players_card.append(cards_for_play.pop(random.choice(list(range(0,len(cards_for_play))))))
     dealers_card.append(cards_for_play.pop(random.choice(list(range(0,len(cards_for_play))))))
     players_card.append(cards_for_play.pop(random.choice(list(range(0,len(cards_for_play))))))
-
+    
     print("")
     print(f"Your hand: {players_card}  ({hand_evaluation(players_card)})")
     print(f"Dealer hand: {dealers_card}  ({hand_evaluation(dealers_card)})")
@@ -763,7 +733,67 @@ while to_continue == True:
                 
             elif decision_1 == '4':
                 split()
-    
+                if local_win == 2:
+                    print("")
+                    print(f"Hand 1: {hand_1}  ({hand_evaluation(hand_1)})")
+                    print(f"Hand 2: {hand_2}  ({hand_evaluation(hand_2)})")
+                    print(f"Dealer hand: {dealers_card}  ({hand_evaluation(dealers_card)})")
+                    print("")
+                    print("You won both hands!") 
+                    players_win += 2
+                    wallet += 2 * wage
+                
+                elif local_push == 2:
+                    print("")
+                    print(f"Hand 1: {hand_1}  ({hand_evaluation(hand_1)})")
+                    print(f"Hand 2: {hand_2}  ({hand_evaluation(hand_2)})")
+                    print(f"Dealer hand: {dealers_card}  ({hand_evaluation(dealers_card)})")
+                    print("")
+                    print("You pushed both hands!") 
+                    draws += 2
+
+                elif local_loss == 2:
+                    print("")
+                    print(f"Hand 1: {hand_1}  ({hand_evaluation(hand_1)})")
+                    print(f"Hand 2: {hand_2}  ({hand_evaluation(hand_2)})")
+                    print(f"Dealer hand: {dealers_card}  ({hand_evaluation(dealers_card)})")
+                    print("")
+                    print("You lost both hands!") 
+                    dealers_win += 2
+                    wallet -= 2 * wage
+
+                elif local_win == 1 and local_loss == 1:
+                    print("")
+                    print(f"Hand 1: {hand_1}  ({hand_evaluation(hand_1)})")
+                    print(f"Hand 2: {hand_2}  ({hand_evaluation(hand_2)})")
+                    print(f"Dealer hand: {dealers_card}  ({hand_evaluation(dealers_card)})")
+                    print("")
+                    print("You won one hand and lost one hand!") 
+                    players_win += 1
+                    dealers_win += 1
+
+                elif local_win == 1 and local_push == 1:
+                    print("")
+                    print(f"Hand 1: {hand_1}  ({hand_evaluation(hand_1)})")
+                    print(f"Hand 2: {hand_2}  ({hand_evaluation(hand_2)})")
+                    print(f"Dealer hand: {dealers_card}  ({hand_evaluation(dealers_card)})")
+                    print("")
+                    print("You won one hand and pushed one hand!") 
+                    players_win += 1
+                    draws += 1
+                    wallet += wage
+
+                elif local_push == 1 and local_loss == 1:
+                    print("")
+                    print(f"Hand 1: {hand_1}  ({hand_evaluation(hand_1)})")
+                    print(f"Hand 2: {hand_2}  ({hand_evaluation(hand_2)})")
+                    print(f"Dealer hand: {dealers_card}  ({hand_evaluation(dealers_card)})")
+                    print("")
+                    print("You lost one hand and pushed one hand!") 
+                    dealers_win += 1
+                    draws += 1
+                    wallet -= wage
+                    
     print(f"Current Profit/Loss: {wallet}")
     to_continue_decision = input("Do you want to continue? (y/n)")
     if to_continue_decision == 'y':
