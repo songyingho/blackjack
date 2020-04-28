@@ -15,9 +15,5 @@
 
 ## On Web Browser
 
-1. Download all the files available in this folder
-2. Open this [link](https://trinket.io/features/python3)
-3. Open the python file named <code>simulator.py</code> on the text editor.
-  - Example: ![](https://github.com/songyingho/blackjack/blob/master/Guide1.PNG)
-4. Run the file by clicking the run button or press <code>CTRL + Enter</code>
-5. Follow the instructions provided in the interactive code and enjoy !
+1. Open [link](https://trinket.io/python3/52f908c98e?outputOnly=true)
+2. Follow the instructions provided in the interactive code and enjoy !
