@@ -3,6 +3,11 @@
 
 # Guide to Executing Blackjack Simulator
 
+## On Web Browser
+
+1. Open [link](https://trinket.io/python3/52f908c98e?outputOnly=true)
+2. Follow the instructions provided in the interactive code and enjoy !
+
 ## On Command Line
 
 1. Download all the files available in this folder
@@ -12,8 +17,3 @@
 4. On the command line, launch the executable python file named <code>simulator.py</code>
   - Example: <code>python simulator.py</code>
 5. Follow the instructions provided in the interactive code and enjoy !
-
-## On Web Browser
-
-1. Open [link](https://trinket.io/python3/52f908c98e?outputOnly=true)
-2. Follow the instructions provided in the interactive code and enjoy !
