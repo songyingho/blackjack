@@ -1,7 +1,7 @@
 # Blackjack Simulator
 <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Blackjack21.jpg" alt="drawing" width="300"/>
 
-# Guide to Executing Blackjack Simulator
+# Guide to Testing Blackjack Simulator
 
 ## On Web Browser
 
