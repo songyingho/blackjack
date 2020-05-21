@@ -17,3 +17,8 @@
 4. On the command line, launch the executable python file named <code>simulator.py</code>
   - Example: <code>python simulator.py</code>
 5. Follow the instructions provided in the interactive code and enjoy !
+
+## Future Updates
+
+1. Multiplayer Function
+2. Multi Splits Function
