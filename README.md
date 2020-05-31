@@ -1,7 +1,7 @@
 # Blackjack Simulator
 <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Blackjack21.jpg" alt="drawing" width="300"/>
 
-## Rules To Play
+# Rules To Play
 You play against the dealer, whoever gets higher value of cards at 21 or below wins the round.
 
 # Guide to Testing Blackjack Simulator
