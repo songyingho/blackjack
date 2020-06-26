@@ -25,3 +25,7 @@ You play against the dealer, whoever gets higher value of cards at 21 or below w
 
 1. Multiplayer Function
 2. Multi Splits Function
+
+## Technical Updates
+
+1. Using OOP to build multiplayer function
