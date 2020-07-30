@@ -29,4 +29,4 @@ You play against the dealer, whoever gets higher value of cards at 21 or below w
 ## Technical Updates
 
 1. Using OOP to build multiplayer function
-2. 
+2. Comparison between loop-based and OOP-based model
